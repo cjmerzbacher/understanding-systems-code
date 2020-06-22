@@ -80,6 +80,7 @@ Another direction we can go is to focus less explicitly on the exact mechanisms 
 # TO DO
 
 - [ ] Central dogma figure
-- [ ] Graph of evolution over time (interactive with sliders for K, C)
-- [ ] Graph of evolution over time with autoregulation and decay
+- [x] Graph of evolution over time (interactive with sliders for K, C)
+- [x] Graph of evolution over time with autoregulation and decay
+- [ ] Adjust parameters and units so makes sense relative to literature values
 
