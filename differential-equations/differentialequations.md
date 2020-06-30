@@ -14,7 +14,7 @@ We understand the mechanisms that drive this system well. We know that the molec
 
 Just like chemical reactions, we can model biological processes with differential equations. The central dogma of biology states that cells transcribe DNA into RNA and translate RNA into proteins.
 
-### Insert central dogma figure here
+![Central Dogma of Biology](centraldogma.jpg)
 
 A simple model of gene expression must include these three components. We will call them $G$, $T$, and $P$ for gene, transcript, and protein.
 
@@ -79,8 +79,10 @@ Another direction we can go is to focus less explicitly on the exact mechanisms 
 
 # TO DO
 
-- [ ] Central dogma figure
-- [x] Graph of evolution over time (interactive with sliders for K, C)
+- [x] Central dogma figure
+- [x] Graph of evolution over time
 - [x] Graph of evolution over time with autoregulation and decay
 - [ ] Adjust parameters and units so makes sense relative to literature values
+- [ ] Make interactive graph
+- [ ] Write up section discussing overdaming and underdaming in system.
 
