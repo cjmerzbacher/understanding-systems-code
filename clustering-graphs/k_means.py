@@ -51,7 +51,7 @@ def cluster(k):
     diffs, centroids = update(data, centroids, k)
 
     centroid_data = [centroids]
-
+    print(centroids)
     count = 0
     while(max([max(diffs[i]) for i in range(k)]) > 0.05):
         count+=1
@@ -59,11 +59,11 @@ def cluster(k):
         categories = assign(data, centroids)
         data['closest'] = categories
         diffs, centroids = update(data, centroids, k)
-        centroid_data.append(centroids)
+        #centroid_data.append(centroids)
     data.to_csv('result_data'+str(k)+'.csv')
     #centroid_data.to_csv('centroid_result_data'+str(k)+'.csv')
 
-    return centroid_data
+    return centroids
 
 
     

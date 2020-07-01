@@ -16,8 +16,36 @@ Often, experimental data must be preprocessed to remove noise, outliers, and nor
 
 ![Normalization](normalization.jpg)
 
-**Note**: Code with the data preprocessing steps can be found here. 
-#### insert link to code?
+```python
+import pandas as pd
+
+#Read in gene interaction data
+raw_data = pd.read_csv('yeast_gene_interactions.csv',sep='\t')
+
+#Remove 90, 100 minute time point as outliers
+raw_data = raw_data.drop(['t:90', 't:100'], axis=1)
+
+#Remove ORFs with low average 
+raw_data['row_mean'] = raw_data.loc[: , "t:0":"t:160"].mean(axis=1)
+cutoff = raw_data.row_mean.mean() - raw_data.row_mean.std()*2
+cleaned_data = raw_data.loc[raw_data.row_mean > cutoff]
+
+#remove ORFs with low variability
+cleaned_data['row_std'] = cleaned_data.loc[: , "t:0":"t:160"].std(axis=1)
+cutoff = cleaned_data.row_std.mean() - cleaned_data.row_std.std()*2
+cleaned_data = cleaned_data.loc[cleaned_data.row_std > cutoff]
+
+#Normalize gene vectors 
+normalized_data = cleaned_data
+for i in range(len(cleaned_data)):
+    gene_vector = cleaned_data.iloc[i]['t:0':'t:160']
+    new_vector = (gene_vector - gene_vector.mean() ) / gene_vector.std()
+    normalized_data.iloc[i] = new_vector
+normalized_data['NAME'] = cleaned_data.NAME
+normalized_data['YORF'] = cleaned_data.YORF
+normalized_data['GWEIGHT'] = cleaned_data.GWEIGHT
+
+```
 
 There are a variety of clustering algorithms, but all of them rely on calculating how close individual data points are to each other. But what does distance mean in a high-dimensional space like our gene expression data? One common distance metric is the **Euclidean distance**. The euclidean distance between two points in n-dimensional space is defined as 
 
@@ -62,8 +90,6 @@ def assign(data, centroid_positions):
     data['closest'] = cluster_assignments
 ```
 
-![New Cluster Positions](newclusters.jpg)
-
 Now, the centroids of the assigned clusters are recalculated. 
 
 
@@ -84,7 +110,7 @@ def update(data, centroid_positions, k):
 centroid_movements, centroid_positions = update(data, centroid_positions, k)
 ```
 
-#### Figure displaying new centroid positions with arrows
+![New Cluster Positions](newclusters.jpg)
 
 This process - assign data to clusters, then update the cluster centroids - is repeated until the centroids no longer change location significantly.
 
@@ -109,39 +135,18 @@ Similar clustering methods to k-means use other metrics of centrality to determi
 
 Another class of methods is agglomerative clustering methods. These methods start with all data points in separate clusters and merge close clusters iteratively until all points are combined in a single cluster. 
 
-## Insert code for AC
-
 ![Agglomerative Clustering](agglomerative.jpg)
 
 Agglomerative methods do not assume an exact number of clusters. Instead, the results are displayed as a **dendrogram** and the analyst can select the appropriate number of agglomerative iterations to reach an optimal number of clusters.
 
 ## Insert dendrogram here
 
-Applying these two methods to our yeast gene expression data set, we can see ...
+We can now apply these two methods to our yeast cell cycle gene expression dataset. Since we don't know the optimal number of clusters, we ran our clustering algorithm with 4-16 clusters and plotted the elbow plot.
 
-## Add results of analysis here
+![Elbow Plot](elbow_plot.png)
 
+Based on the elbow plot, the optimal number of clusters looks to be 15. We can look at the best clusterings by projecting the data and cluster centroids into 2 dimensions using dimensionality reduction methods (in this case, LDA). 
 
-Note: All 2D visualizations here are of higher-dimensional data reduced using linear discriminant analysis (LDA).
+![LDA](lda.png)
 
-Hierarchical clustering (Agglomerative) 
-Select: single linkage, complete li
-
-
-- [ ] Include Pearson correlation, not just Euclidean distance
-- [x] Project clusters into 2D with LDA(?)
-    https://towardsdatascience.com/dimensionality-reduction-toolbox-in-python-9a18995927cd
-- [ ] Animation of clustering over time
-- [x] Elbow plot of different k
-    - [x] Calculate distortion https://www.geeksforgeeks.org/elbow-method-for-optimal-value-of-k-in-kmeans/
-- [ ] Agglomerative clustering
-- [ ] Add results of analysis
-- [x] Diagrams
-    - [x] Normalization figure
-    - [x] Initial random centroids
-    - [x] New centroid positions and arrows
-    - [x] Final clustering results
-    - [x] Agglomerative clustering steps diagram
-- [x] Display data table 
-- [x] Euclidean distance location
-- [x] Insert code
+As you can see, the clusters separate regions of the dataset. We would hypothesize that genes in the same cluster are more likely to have related functions than genes in different clusters. This information can inform later biology experiments.

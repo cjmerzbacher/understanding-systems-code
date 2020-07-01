@@ -3,7 +3,6 @@ import pandas as pd
 #Read in gene interaction data
 raw_data = pd.read_csv('yeast_gene_interactions.csv',sep='\t')
 
-
 #Remove 90, 100 minute time point as outliers
 raw_data = raw_data.drop(['t:90', 't:100'], axis=1)
 
