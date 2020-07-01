@@ -14,7 +14,7 @@ The sample dataset used in this section is yeast mitotic cell cycle data (Cho, 1
 
 Often, experimental data must be preprocessed to remove noise, outliers, and normalize the features of interest. In this case, we remove the 10th and 11th time points as outliers and remove genes with low average activity and low variability as not relevant to the environmental conditions of interest. We also normalize the gene expression vectors to have an average of 0 and a standard deviation of 1.
 
-#### Normalization figure here
+![Normalization](normalization.jpg)
 
 **Note**: Code with the data preprocessing steps can be found here. 
 #### insert link to code?
@@ -29,7 +29,7 @@ $distance(p, q) = \sqrt{(q_1 - p_1)^2 + (q_2 - p_2)^2 + ... + (q_n - p_n)^2}$
 
 The most common method of clustering a graph is **k-means clustering**. K-means clustering requires the user to input the number of clusters expected, or k, as a parameter. Initially, k centroids are randomly created.
 
-#### Initial randomly distributed centroids
+![Initial Cluster Assignments](initialclusters.jpg)
 
 ```python
 centroid_positions = []
@@ -62,7 +62,7 @@ def assign(data, centroid_positions):
     data['closest'] = cluster_assignments
 ```
 
-#### Figure displaying original centroid positions
+![New Cluster Positions](newclusters.jpg)
 
 Now, the centroids of the assigned clusters are recalculated. 
 
@@ -99,7 +99,7 @@ iteration_count = 0
         centroid_data.append(centroid_positions)
 ```
 
-#### Figure displaying final clustering results
+![Final Cluster Positions](finalclusters.jpg)
 
 Often, however, we do not initially know how many clusters exist in our data. We can run the k-means clustering algorithm for a variety of k values and plot the average distance to the centroid of the cluster. This plot is known as an **elbow plot**. 
 
@@ -111,7 +111,7 @@ Another class of methods is agglomerative clustering methods. These methods star
 
 ## Insert code for AC
 
-## Insert AC clustering diagram
+![Agglomerative Clustering](agglomerative.jpg)
 
 Agglomerative methods do not assume an exact number of clusters. Instead, the results are displayed as a **dendrogram** and the analyst can select the appropriate number of agglomerative iterations to reach an optimal number of clusters.
 
@@ -136,12 +136,12 @@ Select: single linkage, complete li
     - [x] Calculate distortion https://www.geeksforgeeks.org/elbow-method-for-optimal-value-of-k-in-kmeans/
 - [ ] Agglomerative clustering
 - [ ] Add results of analysis
-- [ ] Diagrams
-    - [ ] Normalization figure
-    - [ ] Initial random centroids
-    - [ ] New centroid positions and arrows
-    - [ ] Final clustering results
-    - [ ] Agglomerative clustering steps diagram
+- [x] Diagrams
+    - [x] Normalization figure
+    - [x] Initial random centroids
+    - [x] New centroid positions and arrows
+    - [x] Final clustering results
+    - [x] Agglomerative clustering steps diagram
 - [x] Display data table 
 - [x] Euclidean distance location
 - [x] Insert code
