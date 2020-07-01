@@ -6,37 +6,100 @@ One common example of datasets of this type is **gene expression data**. We can 
 
 The sample dataset used in this section is yeast mitotic cell cycle data (Cho, 1998). A sample of the dataset is below. There are columns for the gene name (if known) and its relative expression levels at timepoints 0 to 160 minutes.
 
-## Insert head of datatable here
+| Gene Name   | *t* = 0 |  ...  | *t* = 160 |
+| :---        | :----:  |:----: |      ---: |
+| YDL025C     | -0.1725 |       | -0.3135   |
+| YKL032C     | -0.2364 |       | 0.0751    |
+|YJR150C      |-0.6929  |       |-0.7298    |
 
 Often, experimental data must be preprocessed to remove noise, outliers, and normalize the features of interest. In this case, we remove the 10th and 11th time points as outliers and remove genes with low average activity and low variability as not relevant to the environmental conditions of interest. We also normalize the gene expression vectors to have an average of 0 and a standard deviation of 1.
 
-## Normalization figure here
+#### Normalization figure here
 
-There are a variety of clustering algorithms, but all of them rely on calculating how close individual data points are to each other. But what does distance mean in a high-dimensional space like our gene expression data? One common distance metric is the **Euclidean distance**. The euclidean distance between two points is defined as 
+**Note**: Code with the data preprocessing steps can be found here. 
+#### insert link to code?
+
+There are a variety of clustering algorithms, but all of them rely on calculating how close individual data points are to each other. But what does distance mean in a high-dimensional space like our gene expression data? One common distance metric is the **Euclidean distance**. The euclidean distance between two points in n-dimensional space is defined as 
+
+ <center>
+
+$distance(p, q) = \sqrt{(q_1 - p_1)^2 + (q_2 - p_2)^2 + ... + (q_n - p_n)^2}$
  
- ## Euclidean distance equation
+</center>
 
 The most common method of clustering a graph is **k-means clustering**. K-means clustering requires the user to input the number of clusters expected, or k, as a parameter. Initially, k centroids are randomly created.
 
-## Initial randomly distributed centroids
+#### Initial randomly distributed centroids
+
+```python
+centroid_positions = []
+    for j in range(k):
+        coordinates = []
+        for i in data:
+            r = random.uniform(data[i].min(), data[i].max())
+            coordinates.append(r)
+        centroid_positions.append(coordinates)
+```
 
 Each data point is assigned to the cluster of the closest centroid (using Euclidean distance). The sample assignment function is below.
 
-## Insert assignment code
+```python
+def assign(data, centroid_positions):
+    cluster_assignments = []
+    for i in range(len(data)):
+        datapt = data.iloc[i]
+        min_distance = 800000
+        cluster_assignment = 0
+        for j in range(len(centroid_positions)):
+            euclidean_distance = math.sqrt(sum([(a - b) ** 2 for a, b in zip(centroid_positions[j], datapt)]))
+            if euclidean_distance < min_distance:
+                min_distance = euclidean_distance
+                cluster_assignment = j
+        cluster_assignments.append(cluster_assignment)
+    return cluster_assignments
 
-## Figure displaying original centroid positions
+    cluster_assignments = assign(data, centroid_positions)
+    data['closest'] = cluster_assignments
+```
+
+#### Figure displaying original centroid positions
 
 Now, the centroids of the assigned clusters are recalculated. 
 
-## Update code
 
-## Figure displaying new centroid positions with arrows
+```python
+def update(data, centroid_positions, k):
+    centroid_movements = []
+    for j in range(k):
+        datapt_centroid = data.loc[data.closest == j].reset_index(drop=True).loc[1:, 't:0':'t:160']
+        new_coordinates = []
+        for i in datapt_centroid:
+            new_coordinate = datapt_centroid[i].mean()
+            new_coordinates.append(new_coordinate)
+        centroid_movement = [abs(a - b) for a, b in zip(centroid_positions[j], coord)]
+        centroid_movements.append(centroid_movement)
+        centroid_positions[j] = new_coordinates
+    return centroid_movements, centroid_positions
+
+centroid_movements, centroid_positions = update(data, centroid_positions, k)
+```
+
+#### Figure displaying new centroid positions with arrows
 
 This process - assign data to clusters, then update the cluster centroids - is repeated until the centroids no longer change location significantly.
 
-## Iteration code 
+```python
+iteration_count = 0
+    while(max([max(centroid_movements[i]) for i in range(k)]) > 0.05):
+        iteration_count+=1
+        print('Iteration', iteration_count)
+        cluster_assignments = assign(data, centroid_positions)
+        data['closest'] = cluster_assignments
+        centroid_movements, centroid_positions = update(data, centroid_positions, k)
+        centroid_data.append(centroid_positions)
+```
 
-## Figure displaying final clustering results
+#### Figure displaying final clustering results
 
 Often, however, we do not initially know how many clusters exist in our data. We can run the k-means clustering algorithm for a variety of k values and plot the average distance to the centroid of the cluster. This plot is known as an **elbow plot**. 
 
@@ -59,7 +122,6 @@ Applying these two methods to our yeast gene expression data set, we can see ...
 ## Add results of analysis here
 
 
-
 Note: All 2D visualizations here are of higher-dimensional data reduced using linear discriminant analysis (LDA).
 
 Hierarchical clustering (Agglomerative) 
@@ -70,12 +132,16 @@ Select: single linkage, complete li
 - [x] Project clusters into 2D with LDA(?)
     https://towardsdatascience.com/dimensionality-reduction-toolbox-in-python-9a18995927cd
 - [ ] Animation of clustering over time
-- [ ] Elbow plot of different k
-    - [ ] Calculate distortion https://www.geeksforgeeks.org/elbow-method-for-optimal-value-of-k-in-kmeans/
+- [x] Elbow plot of different k
+    - [x] Calculate distortion https://www.geeksforgeeks.org/elbow-method-for-optimal-value-of-k-in-kmeans/
 - [ ] Agglomerative clustering
 - [ ] Add results of analysis
-- [ ] draw simple diagrams for clustering methods
-- [ ] Normalization figure
-- [ ] Display data table 
-- [ ] Euclidean distance location
-- [ ] insert code
+- [ ] Diagrams
+    - [ ] Normalization figure
+    - [ ] Initial random centroids
+    - [ ] New centroid positions and arrows
+    - [ ] Final clustering results
+    - [ ] Agglomerative clustering steps diagram
+- [x] Display data table 
+- [x] Euclidean distance location
+- [x] Insert code

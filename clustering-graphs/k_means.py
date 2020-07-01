@@ -60,7 +60,8 @@ def cluster(k):
         data['closest'] = categories
         diffs, centroids = update(data, centroids, k)
         centroid_data.append(centroids)
-    data.to_csv('result_data.csv')
+    data.to_csv('result_data'+str(k)+'.csv')
+    #centroid_data.to_csv('centroid_result_data'+str(k)+'.csv')
 
     return centroid_data
 
