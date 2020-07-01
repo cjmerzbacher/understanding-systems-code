@@ -129,7 +129,7 @@ iteration_count = 0
 
 Often, however, we do not initially know how many clusters exist in our data. We can run the k-means clustering algorithm for a variety of k values and plot the average distance to the centroid of the cluster. This plot is known as an **elbow plot**. 
 
-## Insert elbow plot here
+![Elbow Plot](elbow_plot_drawing.jpg)
 
 Similar clustering methods to k-means use other metrics of centrality to determine centroid location (for example, the medoid) or use similarity measures rather than strict classification. 
 
@@ -139,7 +139,7 @@ Another class of methods is agglomerative clustering methods. These methods star
 
 Agglomerative methods do not assume an exact number of clusters. Instead, the results are displayed as a **dendrogram** and the analyst can select the appropriate number of agglomerative iterations to reach an optimal number of clusters.
 
-## Insert dendrogram here
+![Dendrogram](dendrogram.jpg)
 
 We can now apply these two methods to our yeast cell cycle gene expression dataset. Since we don't know the optimal number of clusters, we ran our clustering algorithm with 4-16 clusters and plotted the elbow plot.
 
