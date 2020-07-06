@@ -14,7 +14,7 @@ The sample dataset used in this section is yeast mitotic cell cycle data (Cho, 1
 
 Often, experimental data must be preprocessed to remove noise, outliers, and normalize the features of interest. In this case, we remove the 10th and 11th time points as outliers and remove genes with low average activity and low variability as not relevant to the environmental conditions of interest. We also normalize the gene expression vectors to have an average of 0 and a standard deviation of 1.
 
-![Normalization](normalization.jpg)
+![Normalization](images/normalization.jpg)
 
 ```python
 import pandas as pd
@@ -57,7 +57,7 @@ $distance(p, q) = \sqrt{(q_1 - p_1)^2 + (q_2 - p_2)^2 + ... + (q_n - p_n)^2}$
 
 The most common method of clustering a graph is **k-means clustering**. K-means clustering requires the user to input the number of clusters expected, or k, as a parameter. Initially, k centroids are randomly created.
 
-![Initial Cluster Assignments](initialclusters.jpg)
+![Initial Cluster Assignments](images/initialclusters.jpg)
 
 ```python
 centroid_positions = []
@@ -110,7 +110,7 @@ def update(data, centroid_positions, k):
 centroid_movements, centroid_positions = update(data, centroid_positions, k)
 ```
 
-![New Cluster Positions](newclusters.jpg)
+![New Cluster Positions](images/newclusters.jpg)
 
 This process - assign data to clusters, then update the cluster centroids - is repeated until the centroids no longer change location significantly.
 
@@ -125,28 +125,28 @@ iteration_count = 0
         centroid_data.append(centroid_positions)
 ```
 
-![Final Cluster Positions](finalclusters.jpg)
+![Final Cluster Positions](images/finalclusters.jpg)
 
 Often, however, we do not initially know how many clusters exist in our data. We can run the k-means clustering algorithm for a variety of k values and plot the average distance to the centroid of the cluster. This plot is known as an **elbow plot**. 
 
-![Elbow Plot](elbow_plot_drawing.jpg)
+![Elbow Plot](images/elbow_plot_drawing.jpg)
 
 Similar clustering methods to k-means use other metrics of centrality to determine centroid location (for example, the medoid) or use similarity measures rather than strict classification. 
 
 Another class of methods is agglomerative clustering methods. These methods start with all data points in separate clusters and merge close clusters iteratively until all points are combined in a single cluster. 
 
-![Agglomerative Clustering](agglomerative.jpg)
+![Agglomerative Clustering](images/agglomerative.jpg)
 
 Agglomerative methods do not assume an exact number of clusters. Instead, the results are displayed as a **dendrogram** and the analyst can select the appropriate number of agglomerative iterations to reach an optimal number of clusters.
 
-![Dendrogram](dendrogram.jpg)
+![Dendrogram](images/dendrogram.jpg)
 
 We can now apply these two methods to our yeast cell cycle gene expression dataset. Since we don't know the optimal number of clusters, we ran our clustering algorithm with 4-16 clusters and plotted the elbow plot.
 
-![Elbow Plot](elbow_plot.png)
+![Elbow Plot](images/elbow_plot.png)
 
 Based on the elbow plot, the optimal number of clusters looks to be 15. We can look at the best clusterings by projecting the data and cluster centroids into 2 dimensions using dimensionality reduction methods (in this case, LDA). 
 
-![LDA](lda.png)
+![LDA](images/lda.png)
 
 As you can see, the clusters separate regions of the dataset. We would hypothesize that genes in the same cluster are more likely to have related functions than genes in different clusters. This information can inform later biology experiments.
