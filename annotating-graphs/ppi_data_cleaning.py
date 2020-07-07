@@ -14,5 +14,4 @@ data['A'] = raw_data['Gene Name Interactor A'].to_list()
 data['B'] = raw_data['Gene Name Interactor B'].to_list()
 
 data['weight'] = raw_data['Confidence Value'].to_list()
-
-
+data.to_csv('cleaned_data.csv')
