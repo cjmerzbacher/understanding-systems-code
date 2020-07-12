@@ -5,7 +5,7 @@ class DirectedEdge:
         self.weight = weight
     
     def toString(self):
-        return '{} -> {}  {}'.format(v, w, weight)
+        return '{} -> {}  {}'.format(self.v, self.w, self.weight)
     
 class EdgeWeightedDigraph:
     def __init__(self, V):
@@ -24,6 +24,8 @@ class EdgeWeightedDigraph:
             for e in self.graph[v]:
                 print(e.toString())
     
-ewdg = EdgeWeightedDigraph(2)
+ewdg = EdgeWeightedDigraph(3)
 ewdg.addEdge(0, 1, 0.3)
+ewdg.addEdge(0, 2, 0.9)
+ewdg.addEdge(1, 2, 0.15)
 ewdg.getEdges()
