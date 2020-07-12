@@ -12,3 +12,4 @@ plt.show()
 A = nx.adjacency_matrix(smallgraph)
 
 nx.k_nearest_neighbors(smallgraph)
+
