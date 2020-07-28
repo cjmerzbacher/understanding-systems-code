@@ -15,6 +15,8 @@ You can download the most recent HIPPIE database [here](http://cbdm-01.zdv.uni-m
 
 We can build a graph using this data. Graphs are made up of edges and vertices. V, or the number of vertices, represents the number of components in the system (in this case, proteins). It is also known as the **size of the network**. E, or the number of edges, represents the number of interactions between components. The data table above is essentially a list of edges and their **weights**. In addition, the interactions are directed from Interactor A to Interactor B. This kind of graph is called an edge-weighted directed graph, or **edge-weighted digraph**. 
 
+### Figure on Graphs labelling their terms
+
 There are multiple packages that can construct graphs for you. Later, we will use one of these (networkX) for simplicity. To start, however, we can write a simple EdgeWeightedDigraph class in Python. The graph will be made up of directed edges:
 
 ```python
@@ -66,7 +68,70 @@ This should print:
 1 -> 2  0.15
 ```
 
-## Factor graphs, adjacency matrix
+Another way to represent a graph is an **adjacency matrix**. An adjacency matrix is a square matrix whose elements represent if a pair of vertices are connected. In the case of a weighted graph, the adjacency matrix values are the edge weights. For our sample graph above, the adjacency matrix would look like this:
 
-## Graph annotation using KNN
+## Insert adjacency matrix figure here
 
+Moving forward, we'll be using the package NetworkX **Link** to construct and analyze our graphs. We first read in our dataset and construct a list of edges from the DataFrame. Each edge is a tuple (a list that cannot be changed) of the two vertices it connects and its weight.
+
+```python
+import pandas as pd 
+import networkx as nx
+import matplotlib.pyplot as plt
+
+data = pd.read_csv('cleaned_data.csv')
+data.head()
+
+edges = []
+for i in range(len(data)):
+    edge = (data.id_A[i], data.id_B[i], data.weight[i])
+    edges.append(edge)
+```
+
+The DiGraph class starts out empty, then we add all the edges in the list we just made. 
+
+```python
+graph = nx.DiGraph()
+graph.add_weighted_edges_from(edges)
+```
+
+NetworkX has a large variety of useful functions, including a function that creates an adjacency matrix for us:
+
+```python
+A = nx.adjacency_matrix(graph)
+```
+
+Networks have several key properties that we can exploit to predict new disease-related genes. 
+
+
+### Outline:
+A. Terms needed to understand graphs: edge betweenness, hubs. Introduce hypotheses of network medicine
+
+Hubs: Non-essential disease genes (representing the majority of all known disease genes) tend to avoid hubs and segregate at the functional periphery of the interactome. In utero essential genes tend to associated with hubs.
+Local hypothesis: Proteins involved in the same disease have an increased tendency to interact with each other.
+Corollary of the local hypothesis: Mutations in interacting proteins often lead to similar disease phenotypes.
+
+Disease module hypothesis: Cellular components associated with a specific disease phenotype show a tendency to cluster in the same network neighborhood.
+
+Network parsimony principle: Causal molecular pathways often coincide with the shortest molecular paths between known disease-associated components.
+
+Shared components hypothesis: Diseases that share disease-associated cellular components (genes, proteins, metabolites, miRNAs) show phenotypic similarity and comorbidity.
+
+B. Computing these metrics for our graph using NetworkX and python
+
+C. We have a list of Alzheimer's related proteins. We identify disease module using edge betweenness removals (mention Markov clustering as another option)
+
+D. List of non-disease related connecting edges - predict these are disease genes as well.
+
+E. Conclusions and further topics
+
+
+## Bibliography
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4889822/
+http://networksciencebook.com/chapter/2#networks-graphs
+
+Proximity KNN Graph: https://proxi.readthedocs.io/en/latest/tutorials/proxi_example_1.html
+
+Local search algorithms paper
+
+https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.assortativity.k_nearest_neighbors.html?highlight=k%20nearest#networkx.algorithms.assortativity.k_nearest_neighbors
