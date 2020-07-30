@@ -27,3 +27,10 @@ als_gene_list = ['APP','BACE1','PSEN1','MAPT','APOE','SNCA','PSEN2',
 #Metrics to consider and compute: connectivity degree, betweenness centrality, closeness centrality, eigenvector centrality, eccentricity
 
 #Identify disease module using edge betweenness removals (mention Markov clustering as another option)
+
+betweenness_centralities = nx.betweenness_centrality(graph, 50)
+
+#Compute in and out degrees
+in_degrees = graph.in_degree()
+out_degrees = graph.out_degree()
+

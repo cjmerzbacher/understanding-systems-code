@@ -101,21 +101,20 @@ NetworkX has a large variety of useful functions, including a function that crea
 A = nx.adjacency_matrix(graph)
 ```
 
-Networks have several key properties that we can exploit to predict new disease-related genes. 
+Protein-protein interaction networks have several key properties that we can exploit to predict new disease-related genes. The **degree** of a node is the number of edges incident on it. In directed networks, nodes have an in-degree and an out-degree. Nodes with a high degree are known as **hubs**, and multiple studies have shown that essential genes are associated with hubs. Disease-causing proteins tend not to be hubs, mostly because defects in essential proteins are fatal. 
+
+Since we hypothesize that disease genes tend to be peripheral, we can look for other metrics of centrality to distinguish them. **Betweenness centrality** measures how much a node is on pathways between other nodes. Nodes with high betweenness centrality tend to be essential. Betweenness centrality is calculated as the percentage of shortest paths that go through a node. Note that algorithms to find the shortest path will not be covered here.
+
+## Betweenness centrality figure
+
+Another hypothesis of network medicine is the **local hypothesis**, which states that proteins involved with the same disease tend to cluster in the same network neighborhood and interact with each other in a **disease module**. We can search the literature for a list of known disease-causing genes and use them to construct a disease module. We can then predict that nodes that are within the disease module are more likely to cause that disease, even if their function is not yet known.
+
+For our graph, we can compute the degree and edge betweenness of each node:
+
 
 
 ### Outline:
 A. Terms needed to understand graphs: edge betweenness, hubs. Introduce hypotheses of network medicine
-
-Hubs: Non-essential disease genes (representing the majority of all known disease genes) tend to avoid hubs and segregate at the functional periphery of the interactome. In utero essential genes tend to associated with hubs.
-Local hypothesis: Proteins involved in the same disease have an increased tendency to interact with each other.
-Corollary of the local hypothesis: Mutations in interacting proteins often lead to similar disease phenotypes.
-
-Disease module hypothesis: Cellular components associated with a specific disease phenotype show a tendency to cluster in the same network neighborhood.
-
-Network parsimony principle: Causal molecular pathways often coincide with the shortest molecular paths between known disease-associated components.
-
-Shared components hypothesis: Diseases that share disease-associated cellular components (genes, proteins, metabolites, miRNAs) show phenotypic similarity and comorbidity.
 
 B. Computing these metrics for our graph using NetworkX and python
 
@@ -135,3 +134,7 @@ Proximity KNN Graph: https://proxi.readthedocs.io/en/latest/tutorials/proxi_exam
 Local search algorithms paper
 
 https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.assortativity.k_nearest_neighbors.html?highlight=k%20nearest#networkx.algorithms.assortativity.k_nearest_neighbors
+
+Network Medicine: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/
+
+Good defs of centrality, EB etc: https://www.nature.com/articles/s41598-019-41552-z
