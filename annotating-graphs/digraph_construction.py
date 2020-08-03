@@ -34,3 +34,20 @@ betweenness_centralities = nx.betweenness_centrality(graph, 50)
 in_degrees = graph.in_degree()
 out_degrees = graph.out_degree()
 
+def cluster_edge_betweenness(iterations, G):
+    for i in range(iterations):
+        eb = nx.edge_betweenness_centrality(G, 10)
+        max_eb = max(eb, key=eb.get)
+        G.remove_edge(max_eb[0], max_eb[1])
+    return G
+
+def calc_proportion_disease_genes(G):
+
+
+#Compute length of connected components
+[len(c) for c in sorted(nx.kosaraju_strongly_connected_components(graph), key=len, reverse=True)]
+
+#Find component for each disease gene
+
+#Compute number of disease genes in each component
+nx.node_connected_component(graph, )

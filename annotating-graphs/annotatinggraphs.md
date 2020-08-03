@@ -107,11 +107,52 @@ Since we hypothesize that disease genes tend to be peripheral, we can look for o
 
 ## Betweenness centrality figure
 
+
+For our graph, we can compute the degree and betweenness centrality of each node. To speed up the computation, we can consider only the shortest paths for the 50 nodes nearest each node in the graph. This code returns a dictionary where the keys are the node numbers and the values are the computed betweenness centralities.
+
+```python
+#Compute in and out degrees
+in_degrees = graph.in_degree()
+out_degrees = graph.out_degree()
+
+#Compute the betweenness centrality
+betweenness_centralities = nx.betweenness_centrality(graph, 50)
+```
+Using these computations, we can rank the proteins in our dataset from most hub-like to most peripheral.
+
+### DO RANKING here
+
 Another hypothesis of network medicine is the **local hypothesis**, which states that proteins involved with the same disease tend to cluster in the same network neighborhood and interact with each other in a **disease module**. We can search the literature for a list of known disease-causing genes and use them to construct a disease module. We can then predict that nodes that are within the disease module are more likely to cause that disease, even if their function is not yet known.
 
-For our graph, we can compute the degree and edge betweenness of each node:
+Let's look at an example disease. Previous research into Alzheimer's has identified several genes associated with the disease. Using the database [here](http://cbdm-01.zdv.uni-mainz.de/~jfontain/cgi-bin/genes2diseases.pl), we can select a list of these genes.
+
+```python
+als_gene_list = ['APP','BACE1','PSEN1','MAPT','APOE','SNCA','PSEN2',
+'C9orf72','BDNF','GRN','TARDBP','LRRK2','PRNP','PARK2','SORL1',
+'CLU','GSK3B','NOTCH3','TOMM40','IDE','SOD1','PICALM','TREM2',
+'CHAT','PINK1','CDK5','NCSTN','BCHE','CYP46A1','BACE2','DYRK1A',
+'LRP1','HTT','A2M','COMT','APBB1','CALHM1','ITM2B','IL1A','VCP',
+'PIN1','PARK7','CR1','CST3','CHRNA7','CTSD','ADAM10','FUS','ACE',
+'IL1B']
+```
+
+To find potential disease modules related to Alzheimer's, we can perform an algorithm that repeatedly removes the edges with high **edge betwenness** from the graph. Edge betweenness is similar to betweenness centrality, except it is computed for a specific edge rather than a node. We would expect modules to have a few edges with high edge betweeness connecting one module to another. When we have completed this process, we will have a dendrogram (see the Clustering Graphs section). The module with the highest proportion of disease genes is hypothesized to be the disease module. We can make a list of the non-annotated nodes in the disease module and predict that these proteins may be disease-linked as well. We can further narrow down the list by computing the degree of these nodes and excluding hubs.
 
 
+```python
+def cluster_edge_betweenness(iterations, G):
+    for i in range(iterations):
+        eb = nx.edge_betweenness_centrality(G, 10)
+        max_eb = max(eb, key=eb.get)
+        G.remove_edge(max_eb[0], max_eb[1])
+    return G
+
+clustered_graph = cluster_edge_betweenness(10, graph)
+```
+
+## Calculate percent of connected components in actual graph disease etc. to complete results
+
+## Conclusions
 
 ### Outline:
 A. Terms needed to understand graphs: edge betweenness, hubs. Introduce hypotheses of network medicine
@@ -138,3 +179,5 @@ https://networkx.github.io/documentation/stable/reference/algorithms/generated/n
 Network Medicine: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/
 
 Good defs of centrality, EB etc: https://www.nature.com/articles/s41598-019-41552-z
+
+Algorithm source: http://finzi.psych.upenn.edu/library/igraph/html/cluster_edge_betweenness.html with paper
