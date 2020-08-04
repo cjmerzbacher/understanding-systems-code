@@ -1,6 +1,5 @@
 # Annotating Graphs
 
-## Intro to networks and graphs Human genome as a network
 Complex systems are often networks of simpler components. In biology, one example are interactions in the human proteome. Just like a genome is all the genes an organism has, the **proteome** is all the proteins an organism can express. The human proteome is not static: while there are around 20,000 genes, each gene can undergo alternative splicing to create multiple proteins. Proteins interact with each other to carry out most cellular processes. These protein-protein interactions can be represented mathematically using **protein-protein interaction networks**. Several databases store these interaction networks and update them based on experimental data. In this section, we will use [HIPPIE](http://cbdm-01.zdv.uni-mainz.de/~mschaefer/hippie/index.php) (Human Integrated Protein-Protein Interactome rEference).
 
 One of the key uses of PPI networks is to identify new disease-related proteins in the human proteome. Once we construct a graph based on the PPI data, we can annotate it to hypothesize groups of related genes.
@@ -15,7 +14,7 @@ You can download the most recent HIPPIE database [here](http://cbdm-01.zdv.uni-m
 
 We can build a graph using this data. Graphs are made up of edges and vertices. V, or the number of vertices, represents the number of components in the system (in this case, proteins). It is also known as the **size of the network**. E, or the number of edges, represents the number of interactions between components. The data table above is essentially a list of edges and their **weights**. In addition, the interactions are directed from Interactor A to Interactor B. This kind of graph is called an edge-weighted directed graph, or **edge-weighted digraph**. 
 
-### Figure on Graphs labelling their terms
+![Graphs](images/basicgraph.png)
 
 There are multiple packages that can construct graphs for you. Later, we will use one of these (networkX) for simplicity. To start, however, we can write a simple EdgeWeightedDigraph class in Python. The graph will be made up of directed edges:
 
@@ -70,7 +69,7 @@ This should print:
 
 Another way to represent a graph is an **adjacency matrix**. An adjacency matrix is a square matrix whose elements represent if a pair of vertices are connected. In the case of a weighted graph, the adjacency matrix values are the edge weights. For our sample graph above, the adjacency matrix would look like this:
 
-## Insert adjacency matrix figure here
+![Adjacency Matrices](images/adjacency.png)
 
 Moving forward, we'll be using the package NetworkX **Link** to construct and analyze our graphs. We first read in our dataset and construct a list of edges from the DataFrame. Each edge is a tuple (a list that cannot be changed) of the two vertices it connects and its weight.
 
@@ -105,8 +104,7 @@ Protein-protein interaction networks have several key properties that we can exp
 
 Since we hypothesize that disease genes tend to be peripheral, we can look for other metrics of centrality to distinguish them. **Betweenness centrality** measures how much a node is on pathways between other nodes. Nodes with high betweenness centrality tend to be essential. Betweenness centrality is calculated as the percentage of shortest paths that go through a node. Note that algorithms to find the shortest path will not be covered here.
 
-## Betweenness centrality figure
-
+![Betweenness Centrality](images/betweennesscentrality.png)
 
 For our graph, we can compute the degree and betweenness centrality of each node. To speed up the computation, we can consider only the shortest paths for the 50 nodes nearest each node in the graph. This code returns a dictionary where the keys are the node numbers and the values are the computed betweenness centralities.
 
@@ -163,6 +161,9 @@ def cluster_edge_betweenness(iterations, G):
 
 clustered_graph = cluster_edge_betweenness(num_iterations, graph)
 ```
+
+![Edge Betweenness Removals](images/eb_removals.png)
+
 After clustering the graph by edge betweeness, we can compute the proportion of disease genes in each module. In the code below, we first count the number of connected components and their size, then compute the proportion of disease genes in each module.
 
 ```python
@@ -181,6 +182,7 @@ percent_disease_genes = 100*count_ccs/size_ccs
 
 new_graph = cluster_edge_betweenness(100, new_graph)
 ```
+
 
 This section offers only a brief introduction to network properties and annotating graphs. For further reading on network medicine, we recommend [this review](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/) by Barabási et al.
 
