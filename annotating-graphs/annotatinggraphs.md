@@ -112,15 +112,29 @@ For our graph, we can compute the degree and betweenness centrality of each node
 
 ```python
 #Compute in and out degrees
-in_degrees = graph.in_degree()
-out_degrees = graph.out_degree()
+degrees = graph.degree()
 
 #Compute the betweenness centrality
 betweenness_centralities = nx.betweenness_centrality(graph, 50)
 ```
 Using these computations, we can rank the proteins in our dataset from most hub-like to most peripheral.
 
-### DO RANKING here
+```python
+#Create dataframe from 
+bc_df = pd.DataFrame.from_dict(betweenness_centralities, orient='index', columns=['bc']).reset_index()
+degrees_df = pd.DataFrame.from_dict(degrees, orient='index', columns=['degrees']).reset_index()
+
+#Join with original dataframe
+df = pd.merge(bc_df, degrees_df, on='index')
+data['index'] = [str(data['Unnamed: 0'][i]) for i in range(len(data))]
+merge = pd.merge(df, data, on='index', how='inner')
+
+#Sort nodes by centrality and degree
+sorted_by_centrality = merge.sort_values('bc', ascending=False)
+sorted_by_degree = merge.sort_values('degrees', ascending=False)
+```
+
+The top 3 most hub-like nodes by degree are ESR2, TRIM25, and APP. The top 3 most hub-like nodes by betweenness centrality are PDZK1, APP, and ITGA4. ESR2 and TRIM25 are both transcription factors, which are proteins that interact with genes, as well as other transcription factors, to regulate transcription. By definition, these genes often have many protein-protein interactions. 
 
 Another hypothesis of network medicine is the **local hypothesis**, which states that proteins involved with the same disease tend to cluster in the same network neighborhood and interact with each other in a **disease module**. We can search the literature for a list of known disease-causing genes and use them to construct a disease module. We can then predict that nodes that are within the disease module are more likely to cause that disease, even if their function is not yet known.
 
@@ -147,24 +161,28 @@ def cluster_edge_betweenness(iterations, G):
         G.remove_edge(max_eb[0], max_eb[1])
     return G
 
-clustered_graph = cluster_edge_betweenness(10, graph)
+clustered_graph = cluster_edge_betweenness(num_iterations, graph)
+```
+After clustering the graph by edge betweeness, we can compute the proportion of disease genes in each module. In the code below, we first count the number of connected components and their size, then compute the proportion of disease genes in each module.
+
+```python
+#Find component for each disease gene and compute counts
+count_ccs = np.zeros(len(size_ccs))
+for i in range(len(als_gene_list)):
+    als_gene = als_gene_list[i]
+    als_gene_key = als_data.loc[als_data.A == als_gene].id_A.unique()
+    if len(als_gene_key) != 0:
+        cc = len(nx.node_connected_component(graph, als_gene_key[0]))
+        for j in range(len(size_ccs)):
+            if cc == size_ccs[j]:
+                count_ccs[j] += 1
+
+percent_disease_genes = 100*count_ccs/size_ccs
+
+new_graph = cluster_edge_betweenness(100, new_graph)
 ```
 
-## Calculate percent of connected components in actual graph disease etc. to complete results
-
-## Conclusions
-
-### Outline:
-A. Terms needed to understand graphs: edge betweenness, hubs. Introduce hypotheses of network medicine
-
-B. Computing these metrics for our graph using NetworkX and python
-
-C. We have a list of Alzheimer's related proteins. We identify disease module using edge betweenness removals (mention Markov clustering as another option)
-
-D. List of non-disease related connecting edges - predict these are disease genes as well.
-
-E. Conclusions and further topics
-
+This section offers only a brief introduction to network properties and annotating graphs. For further reading on network medicine, we recommend [this review](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/) by Barabási et al.
 
 ## Bibliography
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4889822/
