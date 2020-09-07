@@ -1,0 +1,3 @@
+NOTE: storing current accumulators (from training 1 segments) to file 'traindir/accumulators/acc.0.0.bin' and exiting.
+//anaconda3/lib/python3.7/site-packages/segway/observations.py:435: RuntimeWarning: invalid value encountered in arcsinh
+  float_data = arcsinh(float_data)

@@ -1,0 +1,159 @@
+
+% Dense CPTs
+5 
+0 
+start_seg 
+0 % number parents
+4 % cardinalities
+2.50000000000000000e-01 2.50000000000000000e-01 2.50000000000000000e-01 2.50000000000000000e-01 
+1 
+seg_subseg 
+1 % number parents
+4 1 % cardinalities
+1.00000000000000000e+00 
+1.00000000000000000e+00 
+1.00000000000000000e+00 
+1.00000000000000000e+00 
+2 
+seg_seg 
+1 % number parents
+4 4 % cardinalities
+0.00000000000000000e+00 2.49681646888489456e-01 2.00131125522083481e-02 7.30305240559302238e-01 
+3.55531369170637879e-01 0.00000000000000000e+00 3.23649222055058916e-01 3.20819408774303150e-01 
+4.78112711108825694e-02 3.08819116167821039e-01 0.00000000000000000e+00 6.43369612721296447e-01 
+5.34698609518400869e-01 1.56252247278818729e-01 3.09049143202780374e-01 0.00000000000000000e+00 
+3 
+seg_subseg_subseg 
+2 % number parents
+4 1 1 % cardinalities
+1.00000000000000000e+00 
+1.00000000000000000e+00 
+1.00000000000000000e+00 
+1.00000000000000000e+00 
+4 
+segCountDown_seg_segTransition 
+2 % number parents
+2 4 3 % cardinalities
+9.86082346446554459e-01 9.86082346446345327e-03 4.05683008898212721e-03 
+9.82916319286113227e-01 9.82916319289442106e-03 7.25451752099231899e-03 
+9.84034169418823157e-01 9.84034169419073512e-03 6.12548888698611228e-03 
+9.83268190554684396e-01 9.83268190556342569e-03 6.89912753975221223e-03 
+9.90099009900875293e-01 9.90099009912465827e-03 0.00000000000000000e+00 
+9.90099009900900717e-01 9.90099009909928794e-03 0.00000000000000000e+00 
+9.90099009900921145e-01 9.90099009907886851e-03 0.00000000000000000e+00 
+9.90099009900908045e-01 9.90099009909198996e-03 0.00000000000000000e+00 
+
+
+% means
+8 
+0 
+mean_seg0_subseg0_h3k27me3 1 2.1499654651e-01 
+1 
+mean_seg0_subseg0_h3k36me3 1 6.1409864575e-02 
+2 
+mean_seg1_subseg0_h3k27me3 1 9.2738986015e-01 
+3 
+mean_seg1_subseg0_h3k36me3 1 4.4750964642e-01 
+4 
+mean_seg2_subseg0_h3k27me3 1 6.2611007690e-01 
+5 
+mean_seg2_subseg0_h3k36me3 1 1.2860679626e+00 
+6 
+mean_seg3_subseg0_h3k27me3 1 1.7025411129e-01 
+7 
+mean_seg3_subseg0_h3k36me3 1 6.0321652889e-01 
+
+
+% diagonal covariance matrices
+2 
+0 
+covar_h3k27me3 1 6.7617654800e-02 
+1 
+covar_h3k36me3 1 4.0495205671e-02 
+
+
+% dense PMFs
+1 
+0 
+dpmf_always 1 1.00000000000000000e+00 
+
+
+% Components
+8 
+0 
+1 
+0 mc_asinh_norm_seg0_subseg0_h3k27me3 
+mean_seg0_subseg0_h3k27me3 covar_h3k27me3 
+1 
+1 
+0 mc_asinh_norm_seg0_subseg0_h3k36me3 
+mean_seg0_subseg0_h3k36me3 covar_h3k36me3 
+2 
+1 
+0 mc_asinh_norm_seg1_subseg0_h3k27me3 
+mean_seg1_subseg0_h3k27me3 covar_h3k27me3 
+3 
+1 
+0 mc_asinh_norm_seg1_subseg0_h3k36me3 
+mean_seg1_subseg0_h3k36me3 covar_h3k36me3 
+4 
+1 
+0 mc_asinh_norm_seg2_subseg0_h3k27me3 
+mean_seg2_subseg0_h3k27me3 covar_h3k27me3 
+5 
+1 
+0 mc_asinh_norm_seg2_subseg0_h3k36me3 
+mean_seg2_subseg0_h3k36me3 covar_h3k36me3 
+6 
+1 
+0 mc_asinh_norm_seg3_subseg0_h3k27me3 
+mean_seg3_subseg0_h3k27me3 covar_h3k27me3 
+7 
+1 
+0 mc_asinh_norm_seg3_subseg0_h3k36me3 
+mean_seg3_subseg0_h3k36me3 covar_h3k36me3 
+
+
+% Mixtures of components
+8 
+0 
+1 
+mx_seg0_subseg0_h3k27me3 
+1 dpmf_always 
+mc_asinh_norm_seg0_subseg0_h3k27me3 
+1 
+1 
+mx_seg0_subseg0_h3k36me3 
+1 dpmf_always 
+mc_asinh_norm_seg0_subseg0_h3k36me3 
+2 
+1 
+mx_seg1_subseg0_h3k27me3 
+1 dpmf_always 
+mc_asinh_norm_seg1_subseg0_h3k27me3 
+3 
+1 
+mx_seg1_subseg0_h3k36me3 
+1 dpmf_always 
+mc_asinh_norm_seg1_subseg0_h3k36me3 
+4 
+1 
+mx_seg2_subseg0_h3k27me3 
+1 dpmf_always 
+mc_asinh_norm_seg2_subseg0_h3k27me3 
+5 
+1 
+mx_seg2_subseg0_h3k36me3 
+1 dpmf_always 
+mc_asinh_norm_seg2_subseg0_h3k36me3 
+6 
+1 
+mx_seg3_subseg0_h3k27me3 
+1 dpmf_always 
+mc_asinh_norm_seg3_subseg0_h3k27me3 
+7 
+1 
+mx_seg3_subseg0_h3k36me3 
+1 dpmf_always 
+mc_asinh_norm_seg3_subseg0_h3k36me3 
+
