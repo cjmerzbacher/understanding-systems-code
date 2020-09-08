@@ -47,13 +47,23 @@ $ \frac{\delta P(m_n)}{\delta t} = f_{n-1}m_{n-1} + g_{n+1}m_{n+1} - (f_n + g_n)
 
 </center> 
 
-For the simple model we established, the only components of $f$ and $g$ are constant degradation and production. Therefore, $f_n$ is just $S_m$ and $g_m$ is $d_m n$. The number of mRNA in a cell $m_n$ is a Poisson distribution:
+For the simple model we established, the only components of $f$ and $g$ are constant degradation and production. Therefore, $f_n$ is just $S_m$ and $g_m$ is $d_{m} n$. The number of mRNA in a cell $m_n$ is a Poisson distribution:
 
 <center>
 
 $m_n = \frac{S_m}{d_m}\frac{1}{n!}m_o \approx \frac{\lambda^n}{n!}e^{-\lambda}$
  
 </center> 
+
+We can make similar equations for the protein distribution; however, we use a geometric distribution rather than a Poisson distribution.
+
+A more complex model includes both mRNA and protein states. If $m$ is the number of mRNA and $n$ is the number of proteins, the possible states can be shown as a 2-dimensional matrix:
+
+## Figure with equations including both
+
+From the Master equation, we will have an infinite set of differential equations. To solve these equations, we can run simulations with many mRNA and protein initial conditions and plot the trajectories.
+
+
 
 
 ## Works Cited
