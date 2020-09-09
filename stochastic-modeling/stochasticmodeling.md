@@ -61,10 +61,90 @@ A more complex model includes both mRNA and protein states. If $m$ is the number
 
 ## Figure with equations including both
 
-From the Master equation, we will have an infinite set of differential equations. To solve these equations, we can run simulations with many mRNA and protein initial conditions and plot the trajectories.
+From the Master equation, we will have an infinite set of differential equations. To solve these equations, we can run simulations with many mRNA and protein initial conditions and plot the trajectories. Examining our simple model, we can build a Master Equation simulator in Python. First, we write functions to describe $m_n$, $g$, and $P(m_n)$. The functions for $m_n$ and $g$ take the current number of mRNA molecules in the cell and return the function value. 
 
+```python
+def get_m(n, mo):
+    mn = mo*Sm/dm*(1/np.math.factorial(n))
+    return mn
 
+def get_g(n):
+    return n*dm
+```
 
+The function to get $\delta P(m_n)/\delta t$ will eventually be integrated to get the function $P(m_n)$, so it takes the previous values of $P$, a time vector, and two parameters: the initial number of mRNA molecules for the simulation ($m_o$) and the current number $n$.
+
+```python
+def get_P(Ps, t, n, mo):
+    P = Ps
+    f = Sm
+    if n == 0:
+        dPdt = get_g(n+1)*get_m(n+1, mo) - get_m(n, mo)*(get_g(n)+f)
+    else:
+        dPdt = f*get_m(n-1, mo) + get_g(n+1)*get_m(n+1, mo) - get_m(n, mo)*(get_g(n)+f)
+    return [dPdt]
+```
+To visualize multiple possible scenarios, we will want to vary the degradation and production parameters. Rather than changing the two parameters individually, we can vary their ratio, in this case $\frac{S_m}{d_m}$. In addition, we can set the maximum number of mRNA molecules to consider. Since most genes only express a limited number of mRNA molecules, this constraint is biologically accurate and speeds up computation.
+
+```python
+Smdm = 0.01
+Sm = Smdm*1
+dm = 1/Smdm
+max_n = 10 #maximum number of mRNA molecules to simulate having
+n = np.arange(max_n) #range of starting mRNA values
+g = [get_g(i) for i in n] #range of starting g values
+times = np.linspace(0., 1., 101)
+```
+We now iterate through a number of initial numbers of mRNAs and integrate the get_P() function for each condition. We can then plot the results of these functions to see the trajectories.
+
+```python
+Ps = []
+for mo in np.arange(0., max_n, 1.): #iterate on mo
+    for i in n:
+        m = [get_m(i,mo) for i in n]
+        ans = odeint(func=get_P, y0=[mo], t=times, args=(i,mo))
+        Ps.append(ans[:, 0])
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 4.5), tight_layout=True)
+for i in np.arange(0, len(Ps), 1):
+    ax1.plot(times, Ps[i], color='k')
+ax1.set_xlabel('Time (t/tmax)')
+ax1.set_ylabel('Number of mRNA molecules')
+ax1.set_ylim([0, 10])
+ax1.grid()
+```
+
+In addition to plotting the raw trajectories, we will want to plot a histogram of the final trajectory positions, which will give us the distribution of mRNA values. 
+
+```python
+#Pull final values for histogram construction
+hist = [P[-1] for P in Ps]
+ax2.hist(hist, bins=max_n, density=True)
+ax2.set_xlabel('Number of mRNA molecules')
+ax2.set_ylabel('Proportion of trajectories')
+```
+
+We ran the simulation for $\frac{S_m}{d_m}$ values of 0.75, 1, and 1.25. When the value of $\frac{S_m}{d_m}$ is below one, production occurs faster than degradation so the overall number of mRNA molecules increases and the distribution shifts upward. 
+
+![Sm/dm = 0.75](images/smds75.png)
+
+At $\frac{S_m}{d_m} = 1, degradation and production rates are perfectly balanced, so the distribution of mRNA molecules remains the same - in this case, perfectly uniform.
+
+![Sm/dm = 1](images/smds1.png)
+
+In the case of $\frac{S_m}{d_m} = 1.25$, degradation is faster than production, so the overal distribution shifts downward.
+
+![Sm/dm = 1.25](images/smds125.png)
+
+In this case, the number of possible initial conditions was small and the model complexity low, so the computational time was not an issue. However, as models incorporate more parameters, the naive protocol used above will start to take a long time. Instead, we can use the **Gillespie algorithm** to speed it up. The Gillespie algorithm has five steps:
+
+1. Write out all possible reactions occuring in the model.
+2. Randomly sample the exponential probability distribution of possible reactions for a single time step
+3. Determine based on the probabilities which reaction was most likely. That reaction occured.
+4. Reinitialize the concentrations and reaction probabilities with the new state
+5. Iterate steps 2-4 until time t.
+
+More information on the Gillespie algorithm can be found here {LINK TO PAPER}.
 
 ## Works Cited
 https://www.youtube.com/watch?v=rBYYpPisjEs&ab_channel=OkinawaInstituteofScienceandTechnologyGraduateUniversity%28OIST%29
