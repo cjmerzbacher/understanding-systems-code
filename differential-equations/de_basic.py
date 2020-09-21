@@ -3,9 +3,9 @@ import numpy as np
 from scipy.integrate import odeint
 
 #Establish constants 
-c = 0.01
+c = 0.1
 k = 0.1
-initial_concs = [0.1, 0.1, 0.1]
+initial_concs = [2, 0, 0]
 
 #Calculate concentrations
 
@@ -28,6 +28,6 @@ ax.plot(times, Gs, label='DNA')
 ax.plot(times, Ts, label='RNA')
 ax.plot(times, Ps, label='Protein')
 ax.legend()
-ax.set_xlabel('time, hrs')
-ax.set_ylabel('Concentration, M')
+ax.set_xlabel('Time, hrs')
+ax.set_ylabel('Number of molecules in the cell')
 plt.grid()

@@ -7,8 +7,8 @@ c = 0.1
 k = 0.1
 v = 0.05
 u = 0.05
-d = 0.01
-initial_concs = [0.1, 0.1, 0.1]
+d = 0.025
+initial_concs = [2, 0, 0]
 
 #Calculate concentrations
 
@@ -19,7 +19,7 @@ def get_concs(C, t):
     dPdt = k*T - u*P
     return [dGdt, dTdt, dPdt]
 
-times = np.linspace(0., 1000., 101)
+times = np.linspace(0., 200., 101)
 ans = odeint(func=get_concs, y0=initial_concs, t=times)
 Gs = ans[:, 0]
 Ts = ans[:, 1]
@@ -31,6 +31,7 @@ ax.plot(times, Gs, label='DNA')
 ax.plot(times, Ts, label='RNA')
 ax.plot(times, Ps, label='Protein')
 ax.legend()
-ax.set_xlabel('Time')
-ax.set_ylabel('Concentration, M')
+ax.set_xlabel('Time, hrs')
+ax.set_ylabel('Number of molecules in the cell')
 plt.grid()
+ax.set_ylim([0, 5])

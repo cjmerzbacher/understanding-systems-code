@@ -16,7 +16,7 @@ Just like chemical reactions, we can model biological processes with differentia
 
 <center>
 
-![Central Dogma of Biology](centraldogma.jpg)
+![Central Dogma of Biology](images/centraldogma.jpg)
 
 <sub><sup>*Fig. 1: The central dogma of biology describes the process by which the hereditary material, DNA, becomes protein, which makes up many cell components. The process of making RNA from DNA is called transcription, and the process of making protein from mRNA (messenger RNA) is translation.*</sup></sub>
 
@@ -48,17 +48,51 @@ $\frac{\delta P}{\delta t} = kT$
 
 We can solve our differential equations using python. Solving a differential equation means finding functions for the evolution of the different variables over time. In this case, that would be $G(t)$, $P(t)$, and $T(t)$. We will use the odeint function from the scipy package, which requires a function that sets up our system of differential equations.
 
-### python with def get_Cs():
+```python
+from scipy.integrate import odeint
+
+def get_concs(C, t):
+    G, T, P = C
+    dGdt = 0
+    dTdt = c*G
+    dPdt = k*T
+    return [dGdt, dTdt, dPdt]
+```
 
 We create a list of times. If we want higher resolution, we include more granular time points. If we want a faster simulation, we include fewer. We integrate the differential equations for each time interval, which returns a list of molecule numbers over time. Differential equations also require an **initial condition**. In this case, this would be the initial number of molecules of DNA, RNA, and protein.
 
-### python with odeint and times statement.
+```python
+import numpy as np
 
-If we set reasonable values for C and K, we can plot how $G$, $P$, and $T$ change over time. 
+times = np.linspace(0., 100., 101)
+ans = odeint(func=get_concs, y0=initial_concs, t=times)
+Gs = ans[:, 0]
+Ts = ans[:, 1]
+Ps = ans[:, 2]
+```
 
-### python with matplotlib statement
+If we set reasonable values for C and K, we can plot how $G$, $P$, and $T$ change over time using the matplotlib package:
 
-### Graph of evolution over time
+```python
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.plot(times, Gs, label='DNA')
+ax.plot(times, Ts, label='RNA')
+ax.plot(times, Ps, label='Protein')
+ax.legend()
+ax.set_xlabel('time, hrs')
+ax.set_ylabel('Concentration, M')
+plt.grid()
+```
+
+<center>
+
+![Basic Model Plot](images/de_basic_plot.png)
+
+<sub><sup>*Fig. 2: The results of our basic model plotted over time. DNA stays constant with 2 copies, but the number of RNA and protein molecules both grow exponentially until infinitely large.*</sup></sub>
+
+</center>
 
 The amount of protein and mRNA in the cell grows infinitely large. This doesn’t make any physical sense - cells would explode with the amount of protein! We know that the reason cells must make more RNA and protein is because both degrade over time. Let’s add two degradation terms to the model, one for RNA and one for protein. Instead of being dependent on the number of molecules from the previous step (gene or transcript), the degradation rates are proportional to the amount of transcript or protein itself($v$ and $u$ are constants). Our hypothesized mechanism is that the more protein present in the cell, the more quickly enzymes that break down protein can find it, so the fast degradation will occur. 
 
@@ -72,7 +106,14 @@ $\frac{\delta P}{\delta t} = kT - uP$
 
 Solving and plotting our updated system, we can see that the amount of protein and transcript doesn’t grow forever but levels off at a constant number of molecules. 
 
-### Graph of evolution over time
+<center>
+
+![Degradation Model Plot](images/de_deg_plot.png)
+
+<sub><sup>*Fig. 3: The results of our model incorporating degradation plotted over time. DNA still stays constant with 2 copies, but DNA and RNA both grow until a steady state equilibrium is reached. At this equilibrium point (8 copies for protein, 4 copies for RNA), degradation and production are balanced.*</sup></sub>
+
+</center>
+
 
 Let’s add one more mechanism to our model. Often cells know to stop producing a certain protein using negative regulation. The protein produced by a certain gene can block that gene’s further transcription. Therefore, the more protein in a cell, the less the gene that makes it is transcribed, which keeps the levels of protein in a cell stable. This process is known as **autoregulation**.
 
@@ -82,7 +123,14 @@ $\frac{\delta G}{\delta t} = -dP$
 
 </center>
 
-### Autoregulation plots
+<center>
+
+![Autoregulation Model Plot](images/de_autoreg_plot.png)
+
+<sub><sup>*Fig. 4: The results of our autoregulation model plotted over time. Depending on the amount of autoregulation, the amplitude of the oscillations in the number of molecules will either grow (underdamped) or shrink (underdamped). In the plot shown, the oscillations are perfectly damped and will remain the same size. Note that the number of DNA molecules doesn't represent degradation but rather inactivation by the protein product.*</sup></sub>
+
+</center>
+
 
 You can repeat this process, adding new components and mechanisms to the model based on our existing physical understanding of the underlying mechanisms. Notice that as we added more mechanisms to the model, it grew more complex.
 
