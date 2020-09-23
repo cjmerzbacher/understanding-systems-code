@@ -1,10 +1,14 @@
-# Annotating Graphs
+# Network Properties
 
-Complex systems are often networks of simpler components. In biology, one example are interactions in the human proteome. Just like a genome is all the genes an organism has, the **proteome** is all the proteins an organism can express. The human proteome is not static: while there are around 20,000 genes, each gene can undergo alternative splicing to create multiple proteins. Proteins interact with each other to carry out most cellular processes. These protein-protein interactions can be represented mathematically using **protein-protein interaction networks**. Several databases store these interaction networks and update them based on experimental data. In this section, we will use [HIPPIE](http://cbdm-01.zdv.uni-mainz.de/~mschaefer/hippie/index.php) (Human Integrated Protein-Protein Interactome rEference).
+For larger complex systems like the entire human genome, we may not want or be able to describe the mechanisms of interest. Instead, we can use experimental data to define model structure. One common model structure is a network, or graph. Often, complex systems are networks of simpler components. One example is the set of all interactions in the human proteome. Just like a genome is all the genes an organism has, the **proteome** is all the proteins an organism can express. The human proteome is not static: while there are around 20,000 genes, each gene can undergo alternative splicing to create multiple proteins. Proteins interact with each other to carry out most cellular processes. These protein-protein interactions can be represented mathematically using **protein-protein interaction networks** (PPI networks). Several databases store these interaction networks and update them based on experimental data. In this section, we will use [HIPPIE](http://cbdm-01.zdv.uni-mainz.de/~mschaefer/hippie/index.php) (Human Integrated Protein-Protein Interactome rEference).
 
-One of the key uses of PPI networks is to identify new disease-related proteins in the human proteome. Once we construct a graph based on the PPI data, we can annotate it to hypothesize groups of related genes.
+One of the key uses of PPI networks is to identify new disease-related proteins in the human proteome. Once we construct a graph based on the PPI data, we can annotate it to hypothesize groups of related genes and predict which ones may cause a disease.
 
 You can download the most recent HIPPIE database [here](http://cbdm-01.zdv.uni-mainz.de/~mschaefer/hippie/hippie_current.txt). It's formatted as a text file with columns for the two interactors and a confidence value assgined based on the number and quality of studies showing a particular interaction.
+
+<center>
+
+<sub><sup>*Table 1: Sample PPI data from HIPPIE. A interacts with B with a confidence score determined by the strength of literature support for the interaction.*</sup></sub>
 
 | Interactor A   | Interactor B | Confidence Score |
 | :---:        | :----:  |:----: |      ---: |
@@ -12,11 +16,20 @@ You can download the most recent HIPPIE database [here](http://cbdm-01.zdv.uni-m
 | SRGN     | CD44|  0.65    |
 |GRB7      |ERBB2  |0.9   |
 
-We can build a graph using this data. Graphs are made up of edges and vertices. V, or the number of vertices, represents the number of components in the system (in this case, proteins). It is also known as the **size of the network**. E, or the number of edges, represents the number of interactions between components. The data table above is essentially a list of edges and their **weights**. In addition, the interactions are directed from Interactor A to Interactor B. This kind of graph is called an edge-weighted directed graph, or **edge-weighted digraph**. 
+</center>
+
+
+We can build a graph using this data. Graphs are made up of edges and vertices. $V$, or the number of vertices, represents the number of components in the system (in this case, proteins). It is also known as the **size of the network**. $E$, or the number of edges, represents the number of interactions between components. Each edge can have a **weight**, or numeric value assigned to it. For the data above, the weights are the confidence scores given to each interaction. In addition, the interactions are directed from Interactor A to Interactor B. This kind of graph is called an edge-weighted directed graph, or **edge-weighted digraph**. 
+
+<center>
 
 ![Graphs](images/basicgraph.png)
 
-There are multiple packages that can construct graphs for you. Later, we will use one of these (networkX) for simplicity. To start, however, we can write a simple EdgeWeightedDigraph class in Python. The graph will be made up of directed edges:
+<sub><sup>*Fig. 1: Graphs or networks form the basis of many models. Graphs can be directed and undirected and are composed of edges and vertices. Edges can be weighted or unweighted.*</sup></sub>
+
+</center>
+
+There are multiple packages that can construct graphs for you. Later, we will use one of these (networkX) for simplicity. To start, however, we can write a simple EdgeWeightedDigraph class in Python. The graph will be made up of directed edge objects in python. Each DirectedEdge goes from $v$ to $w$ and has a weight attribute.
 
 ```python
 class DirectedEdge:
@@ -29,7 +42,7 @@ class DirectedEdge:
         return '{} -> {}  {}'.format(v, w, weight)
 ```
 
-The toString() method prints the edge with its weight so we can visualize the graph later on. 
+The toString() method prints the edge with its weight so we can visualize the graph later on. The EdgeWeightedDigraph class stores edges as an **adjacency list**. An adjacency list is a list where each element represents the list of nodes connected to a node. For a node $v$, its corresponding element in the adjacency list is a list of edges between $v$ and $w_1, w_2...$, the nodes to which $v$ connects.
 
 ```python
 class EdgeWeightedDigraph:
@@ -67,11 +80,17 @@ This should print:
 1 -> 2  0.15
 ```
 
-Another way to represent a graph is an **adjacency matrix**. An adjacency matrix is a square matrix whose elements represent if a pair of vertices are connected. In the case of a weighted graph, the adjacency matrix values are the edge weights. For our sample graph above, the adjacency matrix would look like this:
+Another way to represent a graph is an **adjacency matrix**. An adjacency matrix is a square matrix whose elements represent if a pair of vertices are connected. In the case of a weighted graph, the adjacency matrix values are the edge weights. For the sample graph we created above, the adjacency matrix would look like this:
+
+<center>
 
 ![Adjacency Matrices](images/adjacency.png)
 
-Moving forward, we'll be using the package NetworkX **Link** to construct and analyze our graphs. We first read in our dataset and construct a list of edges from the DataFrame. Each edge is a tuple (a list that cannot be changed) of the two vertices it connects and its weight.
+<sub><sup>*Fig. 2: Adjacency Matrices are another way of representing a graph. For an unweighted graph, the values of a matrix are binary (either 1 or 0). If a graph is weighted, the values are the weights themselves.*</sup></sub>
+
+</center>
+
+Moving forward, we'll be using the package [NetworkX](https://networkx.github.io/) to construct and analyze our graphs. We first read in our dataset and construct a list of edges from the DataFrame. Each edge is a tuple (a list that cannot be changed) of the two vertices it connects and its weight.
 
 ```python
 import pandas as pd 
@@ -102,9 +121,15 @@ A = nx.adjacency_matrix(graph)
 
 Protein-protein interaction networks have several key properties that we can exploit to predict new disease-related genes. The **degree** of a node is the number of edges incident on it. In directed networks, nodes have an in-degree and an out-degree. Nodes with a high degree are known as **hubs**, and multiple studies have shown that essential genes are associated with hubs. Disease-causing proteins tend not to be hubs, mostly because defects in essential proteins are fatal. 
 
-Since we hypothesize that disease genes tend to be peripheral, we can look for other metrics of centrality to distinguish them. **Betweenness centrality** measures how much a node is on pathways between other nodes. Nodes with high betweenness centrality tend to be essential. Betweenness centrality is calculated as the percentage of shortest paths that go through a node. Note that algorithms to find the shortest path will not be covered here.
+Since we hypothesize that disease genes tend to be peripheral, we can look for other metrics of centrality to distinguish them. **Betweenness centrality** measures how much a node is on pathways between other nodes. Nodes with high betweenness centrality tend to be essential. Betweenness centrality is calculated as the proportion of shortest paths that go through a node. Note that algorithms to find the shortest path will not be covered here.
+
+<center>
 
 ![Betweenness Centrality](images/betweennesscentrality.png)
+
+<sub><sup>*Fig. 3: Betweenness Centrality is a metric of how central a node is. It is calculated as the proportion of the shortest paths between all nodes in the graph that goe through a specific node.*</sup></sub>
+
+</center>
 
 For our graph, we can compute the degree and betweenness centrality of each node. To speed up the computation, we can consider only the shortest paths for the 50 nodes nearest each node in the graph. This code returns a dictionary where the keys are the node numbers and the values are the computed betweenness centralities.
 
@@ -132,7 +157,7 @@ sorted_by_centrality = merge.sort_values('bc', ascending=False)
 sorted_by_degree = merge.sort_values('degrees', ascending=False)
 ```
 
-The top 3 most hub-like nodes by degree are ESR2, TRIM25, and APP. The top 3 most hub-like nodes by betweenness centrality are PDZK1, APP, and ITGA4. ESR2 and TRIM25 are both transcription factors, which are proteins that interact with genes, as well as other transcription factors, to regulate transcription. By definition, these genes often have many protein-protein interactions. 
+The top 3 most hub-like nodes by degree are ESR2, TRIM25, and APP. The top 3 most hub-like nodes by betweenness centrality are PDZK1, APP, and ITGA4. ESR2 and TRIM25 are both transcription factors, which are proteins that interact with genes, as well as other transcription factors, to regulate transcription. By definition, these genes often have many protein-protein interactions because of their role in the cell.
 
 Another hypothesis of network medicine is the **local hypothesis**, which states that proteins involved with the same disease tend to cluster in the same network neighborhood and interact with each other in a **disease module**. We can search the literature for a list of known disease-causing genes and use them to construct a disease module. We can then predict that nodes that are within the disease module are more likely to cause that disease, even if their function is not yet known.
 
@@ -161,10 +186,15 @@ def cluster_edge_betweenness(iterations, G):
 
 clustered_graph = cluster_edge_betweenness(num_iterations, graph)
 ```
+<center>
 
 ![Edge Betweenness Removals](images/eb_removals.png)
 
-After clustering the graph by edge betweeness, we can compute the proportion of disease genes in each module. In the code below, we first count the number of connected components and their size, then compute the proportion of disease genes in each module.
+<sub><sup>*Fig. 4: Betweenness removals remove the edge with the highest edge betweenness to form domains of the graph that may have a functional connection.*</sup></sub>
+
+</center>
+
+After clustering the graph by edge betweeness, we can compute the proportion of disease genes in each module. In the code below, we first count the number of connected components and their size using a built-in NetworkX function , then compute the proportion of disease genes in each module.
 
 ```python
 #Find component for each disease gene and compute counts
@@ -183,8 +213,7 @@ percent_disease_genes = 100*count_ccs/size_ccs
 new_graph = cluster_edge_betweenness(100, new_graph)
 ```
 
-
-This section offers only a brief introduction to network properties and annotating graphs. For further reading on network medicine, we recommend [this review](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/) by Barabási et al.
+This section offers only a brief introduction to network properties and annotating graphs. For further reading on network medicine, we recommend [this review](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/) by Barabási et al. Another family of algorithms we can use to find functional similarity and relate genes and proteins are clustering algorithms, which will be covered [next](../clustering-graphs/clusteringgraphs.md).
 
 ## Bibliography
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4889822/
