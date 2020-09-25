@@ -215,18 +215,3 @@ new_graph = cluster_edge_betweenness(100, new_graph)
 
 This section offers only a brief introduction to network properties and annotating graphs. For further reading on network medicine, we recommend [this review](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/) by Barabási et al. Another family of algorithms we can use to find functional similarity and relate genes and proteins are clustering algorithms, which will be covered [next](../clustering-graphs/clusteringgraphs.md).
 
-## Bibliography
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4889822/
-http://networksciencebook.com/chapter/2#networks-graphs
-
-Proximity KNN Graph: https://proxi.readthedocs.io/en/latest/tutorials/proxi_example_1.html
-
-Local search algorithms paper
-
-https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.assortativity.k_nearest_neighbors.html?highlight=k%20nearest#networkx.algorithms.assortativity.k_nearest_neighbors
-
-Network Medicine: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/
-
-Good defs of centrality, EB etc: https://www.nature.com/articles/s41598-019-41552-z
-
-Algorithm source: http://finzi.psych.upenn.edu/library/igraph/html/cluster_edge_betweenness.html with paper
