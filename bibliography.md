@@ -1,28 +1,38 @@
-## Works Cited
+# Bibliography
+### Differential Equations
+Chen, T. et al. (1999). Modeling Gene Expression with Differential Equations. Pacific Symposium of Biocomputing. 
+
 ### Stochastic Modeling
-https://www.youtube.com/watch?v=rBYYpPisjEs&ab_channel=OkinawaInstituteofScienceandTechnologyGraduateUniversity%28OIST%29
+Takeda, K. (2011). Green and red fluorescent proteins illuminate the mechanics of cell division. Link to video [here](https://www.youtube.com/watch?v=rBYYpPisjEs&ab_channel=OkinawaInstituteofScienceandTechnologyGraduateUniversity%28OIST%29).
 
-Gillespie paper: http://www.stat.yale.edu/~jtc5/GeneticNetworksGroup/Gillespie1977.pdf
-Stochastic modeling paper
-Master eqn paper 
-L18 guide
+Gillespie, D.T. (1977). Exact stochastic simulation of coupled chemical reactions. The Journal of Physical Chemistry. [Link](http://www.stat.yale.edu/~jtc5/GeneticNetworksGroup/Gillespie1977.pdf).
 
-### Netowrks
-## Bibliography
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4889822/
-http://networksciencebook.com/chapter/2#networks-graphs
+Elowitz, M.B. et al. (2002) Stochastic Gene Expression in a Single Cell. Science.
 
-Proximity KNN Graph: https://proxi.readthedocs.io/en/latest/tutorials/proxi_example_1.html
+Gore, J. Lecture 10: Stochastic modeling - The master equation, Fokker-Planck Equation, and the Gillespie algorithm. Link to lecture [here](https://www.youtube.com/watch?v=EXBO08-78IU&list=PLUl4u3cNGP63OI3pSKo8Ha_DFBMxm23xO&index=10&ab_channel=MITOpenCourseWare)
 
-Local search algorithms paper
+### Network Properties
 
-https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.assortativity.k_nearest_neighbors.html?highlight=k%20nearest#networkx.algorithms.assortativity.k_nearest_neighbors
+Guarracino, M.R. and A. Nebbia, (2009). Predicting protein-protein interactions with k-Nearest Neighbors classification algorithm. Conference Paper.
 
-Network Medicine: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3140052/
+Pizzuti, C. and S.E. Rombo (2014). Algorithms and Tools for protein-protein interaction netowkrs clustering, which a special focus on population-based stochastic methods. Bioinformatics.
 
-Good defs of centrality, EB etc: https://www.nature.com/articles/s41598-019-41552-z
+Xu, J. and Y. Li.(2006). Discovering disease-genes by topological features in human protein-protein interaction network. Bioinformatics.
 
-Algorithm source: http://finzi.psych.upenn.edu/library/igraph/html/cluster_edge_betweenness.html with paper
+Ponomarenko, E.A. et al. (2016). The Size of the Human Proteome: The Width and Depth. Int J. Anal Chem.
 
-### Clustering algorihtms
-Cho 1998
+### Clustering Graphs
+
+Scharl, T. and F. Leisch. (2008). Visualizing Gene Clusters using Neighborhood Graphs in R. Technical Report University of Munich.
+
+Heyer, L.J. et al. (1999). Exploring Expression Data: Identification and Analysis of Coexpressed Genes. Genome Research.
+
+Schaeffer, S.E. (2007) Graph Clustering. Computer Science Review.
+
+Cho, R. et al. (1998). A Genome-Wide Transcriptional Analysis of the Mitotic Cell Cycle. Molecular Cell.
+
+Barabási, A.L. et al. (2011). Network Medicine: A Network-based Approach to Human Disease. Nat. Rev. Genet.
+
+Chen, S-J. et al. (2019). Construction and Analysis of Protein-Protein Interaction Network of Heroin Use Disorder. Scientific Reports.
+
+Newman, M. and M. Girvan. (2004). Finding and evaluating community structure in networks. Physical Review E.
