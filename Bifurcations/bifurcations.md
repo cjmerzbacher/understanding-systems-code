@@ -14,15 +14,55 @@ $$\dot{n}=rn\cdot(1-n/K)-\frac{hn}{A+n}$$ (2)
 
 We might call $\frac{hn}{A+n}$ an inverted **saturation** term. It represents the number of fish that the fisherfolk actually collect. As $n$ decreases, the saturation parameter $A$ dominates the term's denominator, decreasing the magnitude of its contribution.
 
+```python
+# Constants
+r = 0.5 # intrinsic growth rate
+K = 800 # carrying capacity
+h = 50 # fishing quota
+A = 30 # saturation term / catch difficulty
+
+# Saturation Demo
+def saturation(n):
+    return h*n/(A+n)
+```
+
+<center>
 ### Graph 1: Demonstration of the saturation term
 <sub><sup>*Fig 1: A demonstration of the saturation term. The value of the term represents the number of fish our modelled fisherfolk succesfully catch. That yield is plotted here for each value of n, with their intended catch h marked by the red dotted line. As n decreases, the yield falls farther and farther short of h.</sub></sup>
+</center>
 
 Equation 2 also has the benefit of preserving the fixed point at $n=0$ (try plugging $n-0$ into Equation 1. Try again for Equation 2). With the presence of $n$ in the saturation term's numerator, we expect Equation 2 to have an additional zero in comparison to the simpler logistic equation we explored last chapter. And, as we established last chapter, we can expect the additional fixed point to generate qualitatively different system behavior than what we saw before.
 
 ## Critical parameter thresholds and bifurcations
 
+```python
+# Constants
+r = 0.5 # intrinsic growth rate
+K = 800 # carrying capacity
+h = fishing.value
+A = 16
+
+# Plot fishery phase portrait (with saturation term)
+
+def fishery_model(n):
+    return r*n*(1-(n/K))-h*n/(A+n)
+
+pops = np.linspace(0., (5*K)/4, num = 3*K)
+
+# zeros calculated in wolfram alpha
+zeros = [0]
+fold = (A+K)**2 - 4*h*K/r
+# cut out zeros that aren't real
+if fold > 0:
+    zeros.append(0.5 * (K - A - math.sqrt(fold)))
+    zeros.append(0.5 * (K - A + math.sqrt(fold)))
+elif fold == 0:
+    zeros.append(K - A)
+```
+<center>
 ### Graph 2: Phase diagram for the fishery model with saturation. Slider for h
 <sub><sup>Fig 2: Phase diagram for our simple fishery model. r = 0.5; K = 800; A = 16; h varies. When h is greater than 10 and less than 100, we see three positive stationary points. As h increases, the range from which the system will return to its non-zero stable stock size narrows. At h = 104, the system reaches a critical threshold, and the two positive stationary points become one. When h is greater than its critical value, the positive fixed points vanish. We call this a fold bifurcation.</sup></sub>
+</center>
 
 Our expectation is corroborated. Take some time to experiment with different values of $h$ using the slider provided. You can clearly see the three fixed points in their full glory when $10<h<100$. We mark a stable fixed point at $n=0$ ($n_{0}$), a stable point near $n=K$ ($n_{2}$), and an unstable point between them ($n_{1}$). 
 
@@ -36,8 +76,10 @@ Just as we can gain insight into a system's behavior by identifying the position
 
 ## Mutual annihilation: the Fold Bifurcation
 
+<center>
 ![Diagram for a Fold Bifurcation](fold_bifurcation.png)
 <sub><sup>Fig 3: Bifurcation diagram for a fold bifurcation. The position of each fixed point plotted for each value of h. Solid lines mark stable points, dashed lines mark unstable points. h is plotted horizontally because we treat the parameter as an independent variable when considering bifurcations. This bifurcation category is named after the characteristic fold shape traced by the fixed points. There is also another bifurcation where the unstable point crosses n = 0.</sup></sub>
+</center>
 
 We plot the position of the system's fixed points at each value of $h$. Solid lines mark the stable points, and dashed lines mark unstable points. This acts as shorthand for the information we'd get by plotting a phase diagram for every value of $h$: the lines won't tell us the precise rate of change, but it tells us the direction of change. We know that the system state will always flow away from dashed lines and toward solid lines, and so we can intuit the structure. In this case, we can see the range of safety, and how it narrows with increasing $h$ until it disappears.
 
@@ -51,8 +93,11 @@ Remember, though, that $h$ only represents the number of fish that the fisherfol
 
 ## Trading stabilities: the Transcritical Bifurcation
 
+Just put in like 3 subplots. The python above graph 2 is sufficient
+<center>
 ### Graph 4: Phase diagram, slider for A
 <sub><sup>Fig 4: Phase diagram for the fishery model. r = 0.5; K = 800; h = 25; A varies. Increasing A decreases the position of the lower non-zero fixed point. After the critical threshold at A = 50, that fixed point trades stabilities with the stationary point at n = 0, becoming stable and disappearing into negative values of n.</sup></sub>
+</center>
 
 As noted in the description of Equation 2, fisherfolk will find it more difficult to catch fish as the stock depletes. There are factors that can make this effect more or less severe: the size of the environment, for example, or the efficiency of the technology that the fisherfolk use to locate members of the stock. $A$ will be smaller for system arrangements that make it comparatively easier to fish from small stocks (smaller environments, more efficient tech), and larger for arrangements that make meeting quota especially difficult (larger environments, less efficient tech). 
 
