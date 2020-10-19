@@ -23,8 +23,26 @@ in which $n =$ the stock size, $t =$ time, and $A = \frac{K-n_{0}}{n_{0}}$ where
 
 With this equation, we can plot a time series to see the logistic curve:
 
+
+```python
+# Constants
+r = growth.value  # growth rate
+K = carrying.value  # carrying capacity
+n_zero = initial.value  # population at t=0
+A = (K-n_zero)/n_zero
+
+# Plot logistic time series
+def logistic(times):
+    n = []
+    for t in times:
+        n.append(K/(1+A*exp(-r*t)))
+    return n
+```
+
+<center>
 ### Graph 1: Logistic Curve
 <sub><sup>Fig 1: The logistic curve. Stock over time. The population's growth slows as it approaches its carrying capacity.</sup></sub>
+</center>
 
 From low values of $n_{0}$, the stock grows exponentially: the growing number of fish means the absolute birth rate increases. The growth levels off as resources grow thin and the death rate increases, until the death rate comes to equal the birth rate as the stock approaches its carrying capacity and the system approaches dynamic equilibrium. From values of $n_{0}>K$, we see the opposite. The stock dies off: the limited resources mean the fish experience a higher death rate than birth rate until enough have died that the rates approach equilibrium.
 
@@ -40,8 +58,21 @@ in which $\dot{n}=dn/dt$ (analogous to the instantaneous growth rate mentioned a
 
 We can represent this graphically by plotting the relationship between $\dot{n}$ and $n$.
 
+```python
+# Constants
+r = growth.value  # growth rate
+K = carrying.value  # carrying capacity
+
+def phase_portrait(pops):
+    n_dot = []
+    for n in pops:
+        n_dot.append(r*n*(1-(n/K)))
+    return n_dot
+```
+<center>
 ### Graph 2: First order phase portrait
 <sub><sup>Fig 2: First order phase portrait for the logistic equation. The stock's growth rate is plotted at population size. Stationary points are marked with circles on the n-axis. System trajectories are marked with arrows.</sup></sub>
+</center>
 
 This is a **phase portrait**. You may remember **phase space** as the space in which all of a system's possible states can be represented. Since Eqn 2 is a first order equation, and the growth rate is uniquely determined by the stock size, the complete phase space is effectively just the $n$-axis. We predict how the system will move through possible states using **trajectories**, which are represented here as vectors on the $n$-axis. We deduce the magnitude and direction of the trajectories by the value of the $\dot{n}$ curve at any given value of $n$.
 
