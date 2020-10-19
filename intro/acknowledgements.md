@@ -1,0 +1,3 @@
+# Acknowledgements
+
+This project would not have been possible without the help of many people. First thanks must go to Professor Brandon Ogbunu. The initial conception of this book was built from a course Charlotte designed with him in Spring 2019. Without his feedback and support, we would not have turned a small final project idea into a completed 'book'. Thanks also to the researchers whose work we drew on for the examples used in this project, especially Stephen Strogatz, Jeff Gore, and the late Donella Meadows.
