@@ -71,7 +71,7 @@ def phase_portrait(pops):
 ```
 <center>
 ### Graph 2: First order phase portrait
-<sub><sup>Fig 2: First order phase portrait for the logistic equation. The stock's growth rate is plotted at population size. Stationary points are marked with circles on the n-axis. System trajectories are marked with arrows.</sup></sub>
+<sub><sup>Fig 2: First order phase portrait for the logistic equation. The stock's growth rate is plotted by population size. Stationary points are marked with circles on the n-axis. System trajectories are marked with arrows.</sup></sub>
 </center>
 
 This is a **phase portrait**. You may remember **phase space** as the space in which all of a system's possible states can be represented. Since Eqn 2 is a first order equation, and the growth rate is uniquely determined by the stock size, the complete phase space is effectively just the $n$-axis. We predict how the system will move through possible states using **trajectories**, which are represented here as vectors on the $n$-axis. We deduce the magnitude and direction of the trajectories by the value of the $\dot{n}$ curve at any given value of $n$.

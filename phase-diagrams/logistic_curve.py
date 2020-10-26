@@ -26,15 +26,37 @@ A = (K-n_zero)/n_zero
 def logistic(times):
     n = []
     for t in times:
-        n.append(K/(1+A*exp(-r*t)))
+        n.append(K/(1+(K-n_zero)/n_zero*exp(-r*t)))
     return n
 
 t = np.linspace(0., 40)
 
-plt.plot(t, logistic(t))
-plt.plot(t, [K]*50, 'r--', label='K')
+# Set constants
+r = 0.4; K = 700
+
+# One time series for each initial value
+n_zero = 100
+logistic_a = logistic(t)
+
+n_zero = 800
+logistic_b = logistic(t)
+
+n_zero = K
+logistic_c = logistic(t)
+
+fig, axs = plt.subplots(1, 3, figsize=(9, 3), sharey=True, sharex=True)
+axs[0].plot(t, logistic_a)
+axs[0].set_xlim([0,20])
+axs[0].plot(t, [K]*50, 'r--')
+axs[1].plot(t, logistic_b)
+axs[1].plot(t, [K]*50, 'r--')
+axs[2].plot(t, logistic_c)
+axs[2].plot(t, [K]*50, 'r--', Label='K')
+
 plt.legend()
-plt.xlabel('time, day')
-plt.ylabel('Fish Stock')
+axs[1].set_xlabel('time, year')
+axs[0].set_ylabel('Fish Stock')
+
+fig.suptitle("Demonstration of the Logistic Model")
 
 plt.show()
